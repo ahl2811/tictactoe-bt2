@@ -1,15 +1,39 @@
 import { useState } from 'react';
 import Board from './components/Board';
-import { SQUARES_LENGTH } from './constants';
+import { MAX_WIDTH, MIN_WIDTH } from './constants';
 import { calculateWinner } from './helpers';
 
 function App() {
+  const localBoardWidth = localStorage.getItem('boardWidth')
+    ? localStorage.getItem('boardWidth')
+    : MIN_WIDTH;
+  const [boardWidth, setBoardWidth] = useState(localBoardWidth);
   const [history, setHistory] = useState([
-    { selectedItem: undefined, squares: Array(SQUARES_LENGTH ** 2).fill(null) },
+    {
+      selectedItem: undefined,
+      squares: Array(localBoardWidth ** 2).fill(null),
+    },
   ]);
   const [stepNumber, setStepNumber] = useState(0);
   const [xIsNext, setXIsNext] = useState(true);
   const [isDescSort, setIsDescSort] = useState(false);
+
+  const initGame = (width) => {
+    setHistory([
+      { selectedItem: undefined, squares: Array(width ** 2).fill(null) },
+    ]);
+    setStepNumber(0);
+    setXIsNext(true);
+  };
+
+  const onChangeBoardWidth = () => {
+    if (!(boardWidth >= MIN_WIDTH && boardWidth <= MAX_WIDTH)) {
+      alert(`Value must be in range ${MIN_WIDTH} to ${MAX_WIDTH}`);
+      return;
+    }
+    initGame(boardWidth);
+    localStorage.setItem('boardWidth', boardWidth);
+  };
 
   const handleClick = (i) => {
     const newHistory = history.slice(0, stepNumber + 1);
@@ -35,6 +59,12 @@ function App() {
     setIsDescSort(!isDescSort);
   };
 
+  const handleEnterBoardWidthInput = (event) => {
+    if (event.key === 'Enter') {
+      onChangeBoardWidth();
+    }
+  };
+
   const moves = history.map((step, index) => {
     let move = index;
     if (isDescSort) {
@@ -44,7 +74,7 @@ function App() {
     return (
       <li key={move}>
         <button
-          className={stepNumber === move && 'move-list selected'}
+          className={stepNumber === move ? 'move-list selected' : ''}
           onClick={() => jumpTo(move)}
         >
           {desc}
@@ -58,7 +88,7 @@ function App() {
   let wonLine = [];
   const winner = calculateWinner(squares);
 
-  if (stepNumber === SQUARES_LENGTH ** 2) {
+  if (stepNumber === history[0].squares.length) {
     status = 'You drawed!!!';
   }
   if (winner) {
@@ -79,6 +109,17 @@ function App() {
       </div>
       <div className="game-info">
         <div>{status}</div>
+        <div>
+          <input
+            value={boardWidth}
+            type="number"
+            min={MIN_WIDTH}
+            max={MAX_WIDTH}
+            onChange={(e) => setBoardWidth(e.target.value)}
+            onKeyPress={handleEnterBoardWidthInput}
+          ></input>
+          <button onClick={onChangeBoardWidth}>Start new width</button>
+        </div>
         <button onClick={toggleSort}>
           {isDescSort ? 'To sort by asc' : 'To sort by desc'}
         </button>
