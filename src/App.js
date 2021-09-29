@@ -115,7 +115,7 @@ function App() {
             type="number"
             min={MIN_WIDTH}
             max={MAX_WIDTH}
-            onChange={(e) => setBoardWidth(e.target.value)}
+            onChange={(e) => setBoardWidth(parseInt(e.target.value))}
             onKeyPress={handleEnterBoardWidthInput}
           ></input>
           <button onClick={onChangeBoardWidth}>Start new width</button>
