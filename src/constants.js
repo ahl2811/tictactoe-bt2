@@ -1,1 +1,2 @@
-export const SQUARES_LENGTH = 3;
+export const MIN_WIDTH = 5;
+export const MAX_WIDTH = 12;
