@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Board from './components/Board';
-import { MAX_WIDTH, MIN_WIDTH } from './constants';
-import { calculateWinner } from './helpers';
+import Board from '../Board';
+import { MAX_WIDTH, MIN_WIDTH } from '../../common/constants';
+import { calculateWinner } from '../../common/helpers';
 
 function App() {
   const localBoardWidth = localStorage.getItem('boardWidth')
@@ -10,7 +10,7 @@ function App() {
   const [boardWidth, setBoardWidth] = useState(localBoardWidth);
   const [history, setHistory] = useState([
     {
-      selectedItem: undefined,
+      selectedPos: undefined,
       squares: Array(localBoardWidth ** 2).fill(null),
     },
   ]);
@@ -20,7 +20,7 @@ function App() {
 
   const initGame = (width) => {
     setHistory([
-      { selectedItem: undefined, squares: Array(width ** 2).fill(null) },
+      { selectedPos: undefined, squares: Array(width ** 2).fill(null) },
     ]);
     setStepNumber(0);
     setXIsNext(true);
@@ -43,7 +43,7 @@ function App() {
 
     const squares = current.squares.slice();
     squares[i] = xIsNext ? 'X' : 'O';
-    newHistory.push({ selectedItem: i, squares });
+    newHistory.push({ selectedPos: i, squares });
 
     setHistory(newHistory);
     setStepNumber(newHistory.length - 1);
@@ -74,7 +74,7 @@ function App() {
     return (
       <li key={move}>
         <button
-          className={stepNumber === move ? 'move-list selected' : ''}
+          className={stepNumber === move ? 'selected' : ''}
           onClick={() => jumpTo(move)}
         >
           {desc}
@@ -100,15 +100,16 @@ function App() {
   return (
     <div className="game">
       <div className="game-board">
+        <div className="status">{status}</div>
+
         <Board
           squares={squares}
-          selectedItem={current.selectedItem}
+          selectedItem={current.selectedPos}
           wonLine={wonLine}
           onClick={handleClick}
         />
       </div>
       <div className="game-info">
-        <div>{status}</div>
         <div>
           <input
             value={boardWidth}
@@ -118,12 +119,18 @@ function App() {
             onChange={(e) => setBoardWidth(parseInt(e.target.value))}
             onKeyPress={handleEnterBoardWidthInput}
           ></input>
-          <button onClick={onChangeBoardWidth}>Start new width</button>
+          <button onClick={onChangeBoardWidth}>
+            <b>START NEW GAME</b>
+          </button>
         </div>
-        <button onClick={toggleSort}>
-          {isDescSort ? 'To sort by asc' : 'To sort by desc'}
-        </button>
-        <ol reversed={isDescSort}>{moves}</ol>
+        <div className="sort">
+          <button onClick={toggleSort}>
+            {isDescSort ? 'Show history by DESC' : 'Show history by ASC'}
+          </button>
+        </div>
+        <div className="move-list">
+          <ul reversed={isDescSort}>{moves}</ul>
+        </div>
       </div>
     </div>
   );

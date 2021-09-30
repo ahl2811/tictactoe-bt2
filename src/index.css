@@ -23,14 +23,14 @@ ul {
   border: 1px solid #999;
   float: left;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 600;
   line-height: 34px;
-  height: 34px;
+  height: 40px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 40px;
 }
 
 .square.won {
@@ -58,7 +58,53 @@ ul {
   margin-left: 20px;
 }
 
-button.move-list.selected {
-  background: #333;
+.move-list {
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 8px;
+  margin: 0;
+}
+
+.move-list > ul {
+  margin: 0;
+  padding: 0;
+  padding-right: 4px;
+  list-style-type: none;
+}
+
+.move-list button {
+  border: none;
+  background: #ddd;
+  padding: 8px 16px;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.move-list .selected {
+  background: #444;
   color: #fff;
+}
+
+.sort button {
+  width: 100%;
+  border: 0;
+  border-radius: 4px 4px 0 0;
+  background: #222;
+  color: #fff;
+  padding: 4px;
+  margin: 4px 0;
+  margin-top: 8px;
+}
+
+.sort button:hover {
+  opacity: 0.9;
+}
+
+.status {
+  margin-bottom: 12px;
+  font-weight: 600;
 }
