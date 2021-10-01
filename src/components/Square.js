@@ -1,13 +1,11 @@
 import React from 'react';
 import '../index.css';
+import { StyledSquare } from './styles/StyledSquare';
 
 export default function Square({ value, won, selected, onClick }) {
-  let style = 'square';
-  if (won) style += ' won';
-  if (selected) style += ' selected';
   return (
-    <button className={style} onClick={onClick}>
+    <StyledSquare won={won} selected={selected} onClick={onClick}>
       {value}
-    </button>
+    </StyledSquare>
   );
 }

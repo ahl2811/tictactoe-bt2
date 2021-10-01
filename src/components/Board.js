@@ -22,7 +22,7 @@ export default function Board({ squares, wonLine, selectedItem, onClick }) {
     <div>
       {[...Array(width).keys()].map((row) => {
         return (
-          <div className="board-row" key={row}>
+          <div key={row}>
             {[...Array(width).keys()].map((col) => {
               return renderSquare(row * width + col);
             })}
